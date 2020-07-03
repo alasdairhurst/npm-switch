@@ -1,0 +1,21 @@
+{
+  "name": "npm-switch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "electron-packager . npm-switch --overwrite --icon=npm_icon.png",
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^9.0.5",
+    "electron-packager": "^15.0.0"
+  },
+  "dependencies": {
+    "debug": "^4.1.1",
+    "chokidar": "^3.4.0"
+  }
+}
