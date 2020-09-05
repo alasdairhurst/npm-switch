@@ -163,11 +163,16 @@ async function copyNpmrc(source) {
 	await fs.symlink(newSource, defaultNpmrc, 'file');
 }
 
+app.dock && app.dock.hide();
+
 app.on('ready', async () => {
 	log('app ready');
 	try {
 		await ensureConfig();
-		win = new BrowserWindow({ show: false });
+		win = new BrowserWindow({
+			show: false,
+			skipTaskbar: true
+		});
 		tray = new Tray(icon_tray);
 		await loadContextMenu(tray);
 		log('watching changes in', npmrcDir);
