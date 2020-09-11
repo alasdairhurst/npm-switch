@@ -7,7 +7,7 @@ const chokidar = require('chokidar');
 const debug = require('debug');
 const log = debug('npm-switch');
 
-const icon_tray = path.join(__dirname, 'npm_icon_tray.png');
+const icon_tray = path.join(__dirname, 'npm_icon_trayTemplate.png');
 const icon = path.join(__dirname, 'npm_icon.png');
 const configDir = path.resolve(os.homedir(), '.npm_switch');
 const npmrcDir = path.resolve(configDir, '.npmrc');
