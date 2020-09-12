@@ -1,24 +1,31 @@
 {
-  "name": "npm-switch",
-  "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "electron-packager . npm-switch --overwrite --icon=npm_icon.png",
-    "start": "electron ."
-  },
-  "author": {
-    "name": "Alasdair Hurst",
-    "email": "omega@omegahurst.co.uk"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "electron": "^9.0.5",
-    "electron-packager": "^15.0.0"
-  },
-  "dependencies": {
-    "debug": "^4.1.1",
-    "chokidar": "^3.4.0"
-  }
+	"name": "npm-switch",
+	"version": "0.1.0",
+	"description": "",
+	"main": "src/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "npm run build:win && npm run build:linux && npm run build:macos",
+		"build:win": "electron-packager . npm-switch --overwrite --platform=win32 --arch=x64 --out=dist/win --icon=./dist/icons/colour/icon.ico --ignore=dist",
+		"build:macos": "electron-packager . npm-switch --overwrite --platform=darwin --arch=x64 --out=dist/macos --icon=./dist/icons/colour/icon.icns --ignore=dist",
+		"build:linux": "electron-packager . npm-switch --overwrite --platform=linux --arch=x64 --out=dist/linux --ignore=dist",
+		"build:icons": "npm run build:icons:colour && npm run build:icons:template",
+		"build:icons:colour": "electron-icon-builder -f -i=./src/icons/icon-colour-lg.png -o=. && mv ./icons ./dist/icons/colour",
+		"build:icons:template": "electron-icon-builder -f -i=./src/icons/icon-template-lg.png -o=. && mv ./icons ./dist/icons/template",
+		"start": "electron ."
+	},
+	"author": {
+		"name": "Alasdair Hurst",
+		"email": "omega@omegahurst.co.uk"
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"electron": "^9.0.0",
+		"electron-icon-builder": "^1.0.2",
+		"electron-packager": "^15.1.0"
+	},
+	"dependencies": {
+		"chokidar": "^3.4.2",
+		"debug": "^4.1.1"
+	}
 }

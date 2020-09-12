@@ -1,20 +1,34 @@
-const { app, Tray, Menu, BrowserWindow, shell, globalShortcut, Notification } = require('electron');
+const { app, Tray, Menu, BrowserWindow, shell, globalShortcut, Notification, nativeTheme } = require('electron');
 const fs = require('fs').promises;
 const constants = require('fs').constants;
 const path = require('path');
-const os = require('os');
 const chokidar = require('chokidar');
 const debug = require('debug');
 const log = debug('npm-switch');
 
-const icon_tray = path.join(__dirname, 'npm_icon_trayTemplate.png');
-const icon = path.join(__dirname, 'npm_icon.png');
-const configDir = path.resolve(os.homedir(), '.npm_switch');
-const npmrcDir = path.resolve(configDir, '.npmrc');
+console.log(app.getAppPath())
+
+const icon_tray_template = path.join(app.getAppPath(), 'src', 'icons', 'icon-trayTemplate.png');
+const icon_tray          = path.join(app.getAppPath(), 'src', 'icons', 'icon-tray.png');
+const icon               = path.join(app.getAppPath(), 'src', 'icons', 'icon-colour-lg.png');
+const configDir    = path.join(app.getPath('home'), '.npm_switch');
+const defaultNpmrc = path.join(app.getPath('home'), '.npmrc');
+const npmrcDir   = path.join(configDir, '.npmrc');
 const configFile = path.join(configDir, 'config.json');
-const defaultNpmrc = path.resolve(os.homedir(), '.npmrc');
 
 let tray;
+
+function getIcon() {
+	// if switching based on theme: nativeTheme.shouldUseDarkColors
+
+	if (process.platform === 'darwin') {
+		return icon_tray_template;
+	} else if (process.platform === 'win32') {
+	 return icon_tray;
+	} else {
+		return icon_tray;
+	}
+}
 
 // look into for a lighter alternative
 // https://github.com/zaaack/node-systray
@@ -50,7 +64,6 @@ async function getContextMenu(config) {
 	const contextMenu = Menu.buildFromTemplate([
 		...none,
 		...config.files.map((label, i) => {
-			const accelerator = `CommandOrControl+Shift+${i + 1}`;
 			const action = async () => {
 				if (config.selected === label) {
 					return;
@@ -67,10 +80,8 @@ async function getContextMenu(config) {
 				});
 				notification.show();
 			}
-			globalShortcut.register(accelerator, action);
 			return {
 				label,
-				accelerator,
 				type: 'radio',
 				click: action,
 				checked: config.selected === label
@@ -165,6 +176,8 @@ async function copyNpmrc(source) {
 
 app.dock && app.dock.hide();
 
+
+
 app.on('ready', async () => {
 	log('app ready');
 	try {
@@ -173,7 +186,7 @@ app.on('ready', async () => {
 			show: false,
 			skipTaskbar: true
 		});
-		tray = new Tray(icon_tray);
+		tray = new Tray(getIcon());
 		await loadContextMenu(tray);
 		log('watching changes in', npmrcDir);
 		const confWatcher = chokidar.watch(configFile);
@@ -189,6 +202,11 @@ app.on('ready', async () => {
 			});
 		});
 
+		nativeTheme.on('updated', () => {
+			tray.setImage(getIcon());
+		});
+
+		// TODO: add info to config file and only watch that file
 		const watcher = chokidar.watch(npmrcDir);
 		watcher.on('ready', () => {
 			watcher.on('all', async (event, path) => {
