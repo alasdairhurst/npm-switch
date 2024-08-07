@@ -7,25 +7,26 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "npm run build:win && npm run build:linux && npm run build:macos",
 		"build:win": "electron-packager . npm-switch --overwrite --platform=win32 --arch=x64 --out=dist/win --icon=./dist/icons/colour/icon.ico --ignore=dist",
-		"build:macos": "electron-packager . npm-switch --overwrite --platform=darwin --arch=x64 --out=dist/macos --icon=./dist/icons/colour/icon.icns --ignore=dist",
+		"build:macos": "npm run build:macos:x64 && npm run build:macos:arm",
+		"build:macos:x64": "electron-packager . npm-switch --overwrite --platform=darwin --arch=x64 --out=dist/macos --icon=./dist/icons/colour/icon.icns --ignore=dist",
+		"build:macos:arm": "electron-packager . npm-switch --overwrite --platform=darwin --arch=arm64 --out=dist/macos --icon=./dist/icons/colour/icon.icns --ignore=dist",
 		"build:linux": "electron-packager . npm-switch --overwrite --platform=linux --arch=x64 --out=dist/linux --ignore=dist",
 		"build:icons": "npm run build:icons:colour && npm run build:icons:template",
-		"build:icons:colour": "electron-icon-builder -f -i=./src/icons/icon-colour-lg.png -o=. && mv ./icons ./dist/icons/colour",
-		"build:icons:template": "electron-icon-builder -f -i=./src/icons/icon-template-lg.png -o=. && mv ./icons ./dist/icons/template",
+		"build:icons:colour": "electron-icon-builder -f -i=./src/icons/icon-colour-lg.png -o=. && mkdir -p ./dist/icons/color && mv ./icons ./dist/icons/colour",
+		"build:icons:template": "electron-icon-builder -f -i=./src/icons/icon-template-lg.png -o=. && mkdir -p ./dist/icons/template && mv ./icons ./dist/icons/template",
 		"start": "electron ."
 	},
 	"author": {
-		"name": "Alasdair Hurst",
-		"email": "omega@omegahurst.co.uk"
+		"name": "Alasdair Hurst"
 	},
 	"license": "MIT",
 	"devDependencies": {
-		"electron": "^10.1.1",
-		"electron-icon-builder": "^1.0.2",
-		"electron-packager": "^15.1.0"
+		"@electron/packager": "^18.3.3",
+		"electron": "^11.5.0",
+		"electron-icon-builder": "^2.0.1"
 	},
 	"dependencies": {
-		"chokidar": "^3.4.2",
-		"debug": "^4.1.1"
+		"chokidar": "^3.6.0",
+		"debug": "^4.3.6"
 	}
 }
