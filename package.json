@@ -1,11 +1,11 @@
 {
 	"name": "npm-switch",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "",
 	"main": "src/index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "npm run build:win && npm run build:linux && npm run build:macos",
+		"build": "rm -rf dist && npm run build:icons && npm run build:win && npm run build:linux && npm run build:macos",
 		"build:win": "electron-packager . npm-switch --overwrite --platform=win32 --arch=x64 --out=dist/win --icon=./dist/icons/colour/icon.ico --ignore=dist",
 		"build:macos": "npm run build:macos:x64 && npm run build:macos:arm",
 		"build:macos:x64": "electron-packager . npm-switch --overwrite --platform=darwin --arch=x64 --out=dist/macos --icon=./dist/icons/colour/icon.icns --ignore=dist",
@@ -22,7 +22,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@electron/packager": "^18.3.3",
-		"electron": "^11.5.0",
+		"electron": "^31.3.1",
 		"electron-icon-builder": "^2.0.1"
 	},
 	"dependencies": {

@@ -46,7 +46,7 @@ async function loadConfig() {
 		config = {};
 	}
 	const files = await fs.readdir(npmrcDir);
-	config.files = files;
+	config.files = files.filter(file => file !== '.DS_Store');
 	return config;
 }
 
